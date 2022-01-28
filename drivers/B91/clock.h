@@ -48,6 +48,8 @@
 #define		CCLK_24M_HCLK_24M_PCLK_24M		clock_init(PLL_CLK_192M, PAD_PLL_DIV, PLL_DIV8_TO_CCLK, CCLK_DIV1_TO_HCLK, HCLK_DIV1_TO_PCLK, PLL_DIV4_TO_MSPI_CLK)
 #define		CCLK_32M_HCLK_32M_PCLK_16M		clock_init(PLL_CLK_192M, PAD_PLL_DIV, PLL_DIV6_TO_CCLK, CCLK_DIV1_TO_HCLK, HCLK_DIV2_TO_PCLK, PLL_DIV4_TO_MSPI_CLK)
 #define		CCLK_48M_HCLK_48M_PCLK_24M		clock_init(PLL_CLK_192M, PAD_PLL_DIV, PLL_DIV4_TO_CCLK, CCLK_DIV1_TO_HCLK, HCLK_DIV2_TO_PCLK, PLL_DIV4_TO_MSPI_CLK)
+#define		CCLK_64M_HCLK_32M_PCLK_16M		clock_init(PLL_CLK_192M, PAD_PLL_DIV, PLL_DIV3_TO_CCLK, CCLK_DIV2_TO_HCLK, HCLK_DIV2_TO_PCLK, PLL_DIV4_TO_MSPI_CLK)
+#define		CCLK_96M_HCLK_48M_PCLK_24M		clock_init(PLL_CLK_192M, PAD_PLL_DIV, PLL_DIV2_TO_CCLK, CCLK_DIV2_TO_HCLK, HCLK_DIV2_TO_PCLK, PLL_DIV4_TO_MSPI_CLK)
 
 /**********************************************************************************************************************
  *                                         global data type                                                           *
@@ -75,7 +77,7 @@ typedef struct {
 typedef enum{
 	PLL_CLK_48M 	= (0 | (16 << 2) | (48 << 8)),
 	PLL_CLK_54M 	= (0 | (17 << 2) | (54 << 8)),
-	PLL_CLK_60M 	= (0 | (18 << 2) | (54 << 8)),
+	PLL_CLK_60M 	= (0 | (18 << 2) | (60 << 8)),
 	PLL_CLK_66M 	= (0 | (19 << 2) | (66 << 8)),
 	PLL_CLK_96M 	= (1 | (16 << 2) | (96 << 8)),
 	PLL_CLK_108M 	= (1 | (17 << 2) | (108 << 8)),

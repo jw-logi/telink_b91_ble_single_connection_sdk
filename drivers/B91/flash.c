@@ -622,41 +622,14 @@ _attribute_text_sec_ void flash_read_uid(unsigned char idcmd,unsigned char *buf)
  * @param[in]   data	- refer to Driver API Doc.
  * @return 		none.
  */
-_attribute_ram_code_sec_noinline_ void flash_lock_ram(flash_type_e type , unsigned short data)
-{
-#if SUPPORT_PFT_ARCH
-	reg_irq_threshold = 1;
-#else
-	unsigned int r= core_interrupt_disable();
-#endif
-
-	mspi_stop_xip();
-	flash_send_cmd(FLASH_WRITE_ENABLE_CMD);
-	flash_send_cmd(FLASH_WRITE_STATUS_CMD);
-	if(type == FLASH_TYPE_PUYA)
-	{
-		mspi_write((unsigned char)data);
-		mspi_wait();
-		mspi_write((unsigned char)(data>>8));//16bit status
-
-	}
-	mspi_wait();
-	mspi_high();
-	flash_wait_done();
-	mspi_high();
-	CLOCK_DLY_5_CYC;
-
-#if SUPPORT_PFT_ARCH
-	reg_irq_threshold = 0;
-#else
-	core_restore_interrupt(r);//???irq_restore(r);
-#endif
-}
 _attribute_text_sec_ void flash_lock(flash_type_e type , unsigned short data)
 {
-	__asm__("csrci 	mmisc_ctl,8");	//disable BTB
-	flash_lock_ram(type,data);
-	__asm__("csrsi 	mmisc_ctl,8");	//enable BTB
+	if(type == FLASH_TYPE_PUYA)
+	{
+		unsigned short status = flash_read_status();
+		data |= (status & ~(FLASH_STATUS_BP_MID146085));
+		flash_write_status(data);
+	}
 }
 
 /**
@@ -664,39 +637,13 @@ _attribute_text_sec_ void flash_lock(flash_type_e type , unsigned short data)
  * @param[in]   type	- flash type include Puya.
  * @return 		none.
  */
-_attribute_ram_code_sec_noinline_ void flash_unlock_ram(flash_type_e type)
-{
-#if SUPPORT_PFT_ARCH
-	reg_irq_threshold = 1;
-#else
-	unsigned int r= core_interrupt_disable();
-#endif
-
-	mspi_stop_xip();
-	flash_send_cmd(FLASH_WRITE_ENABLE_CMD);
-	flash_send_cmd(FLASH_WRITE_STATUS_CMD);
-	if(type == FLASH_TYPE_PUYA)
-	{
-		mspi_write(0);
-		mspi_wait();
-		mspi_write(0);//16bit status
-	}
-	mspi_wait();
-	mspi_high();
-	flash_wait_done();
-	mspi_high();
-	CLOCK_DLY_5_CYC;
-#if SUPPORT_PFT_ARCH
-	reg_irq_threshold = 0;
-#else
-	core_restore_interrupt(r);//???irq_restore(r);
-#endif
-}
 _attribute_text_sec_ void flash_unlock(flash_type_e type)
 {
-	__asm__("csrci 	mmisc_ctl,8");	//disable BTB
-	flash_unlock_ram(type);
-	__asm__("csrsi 	mmisc_ctl,8");	//enable BTB
+	if(type == FLASH_TYPE_PUYA)
+	{
+		unsigned short status = flash_read_status();
+		flash_write_status(status & ~(FLASH_STATUS_BP_MID146085));
+	}
 }
 /**
  * @brief 		This function is used to update the configuration parameters of xip(eXecute In Place),
