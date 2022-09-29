@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	spi_reg.h
+ * @file     spi_reg.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef SPI_REG_H
 #define SPI_REG_H
 
-#include "../sys.h"
+#include "soc.h"
 
 /*******************************      hspi registers: 0x1FFFFC0     ******************************/
 
@@ -35,7 +36,7 @@
 
 #define   reg_hspi_data_buf_adr               0x1FFFFC8
 #define   reg_hspi_xip_base_adr               0x1000000
-#define   reg_spi_data_buf_adr(i)             0x140048+(i)*BASE_ADDR_DIFF
+#define   reg_spi_data_buf_adr(i)             0x80140048+(i)*BASE_ADDR_DIFF
 /**
  * BIT[0:1] the minimum time between the edge of SPI_CS and  the edges of SPI_CLK.the actual duration is (SPI_CLK_OUT/2)*(cs2sclk+1).master only
  * BIT[2]  set 3line mode ,MOSI is bi-directional signal in regular mode.master only
@@ -43,10 +44,10 @@
  * BIT[4]  set dual io mode.master only
  * BIT[5:6] set spi 4 mode. master/slave
  *  *  *         bit5: CPHA-SPI_CLK Phase,bit6: CPOL-SPI_CLK Polarity
- *            MODE0:  CPHA = 0 , CPOL =0;
- *            MODE1:  CPHA = 0 , CPOL =1;
- *            MODE2:  CPHA = 1 , CPOL =0;
- *            MODE3:  CPHA = 1,  CPOL =1;
+ *            MODE0:  CPOL = 0, CPHA =0;
+ *            MODE1:  CPOL = 0, CPHA =1;
+ *            MODE2:  CPOL = 1, CPHA =0;
+ *            MODE3:  CPOL = 1, CPHA =1;
  * BIT[7]  set master/slave mode. 0 slave 1 master default.master/slave
  */
 #define reg_spi_mode0(i) 			REG_ADDR8(PSPI_BASE_ADDR+(i)*BASE_ADDR_DIFF)

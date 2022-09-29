@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	app_buffer.h
+ * @file     app_buffer.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef VENDOR_B91_BLE_SAMPLE_APP_BUFFER_H_
 #define VENDOR_B91_BLE_SAMPLE_APP_BUFFER_H_
 
@@ -57,7 +58,7 @@
  * 1. must be: 2^n, (power of 2)
  * 2. at least 4; recommended value: 8, 16
  */
-#define ACL_RX_FIFO_SIZE				48  // ACL_CONN_MAX_RX_OCTETS + 21, then 16 Byte align
+#define ACL_RX_FIFO_SIZE				CAL_LL_ACL_RX_FIFO_SIZE(ACL_CONN_MAX_RX_OCTETS)  // ACL_CONN_MAX_RX_OCTETS + 21, then 16 Byte align
 #define ACL_RX_FIFO_NUM					8	// must be: 2^n
 
 
@@ -74,7 +75,7 @@
  * 1. (ACL_TX_FIFO_SIZE * (ACL_TX_FIFO_NUM - 1)) must be less than 4096 (4K)
  *    so when ACL TX FIFO size equal to or bigger than 256, ACL TX FIFO number can only be 9(can not use 17 or 33), cause 256*(17-1)=4096
  */
-#define ACL_TX_FIFO_SIZE				48	// ACL_CONN_MAX_TX_OCTETS + 10, then 16 Byte align
+#define ACL_TX_FIFO_SIZE				CAL_LL_ACL_TX_FIFO_SIZE(ACL_CONN_MAX_TX_OCTETS)	// ACL_CONN_MAX_TX_OCTETS + 10, then 16 Byte align
 #define ACL_TX_FIFO_NUM					17	// must be: (2^n) + 1
 
 

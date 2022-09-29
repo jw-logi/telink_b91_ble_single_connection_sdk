@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ota.h
+ * @file     ota.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,32 +20,27 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef OTA_H_
 #define OTA_H_
 
 
-
+/**
+ * @brief 	Legacy OTA command
+ */
 #define CMD_OTA_VERSION						0xFF00	//client -> server
 #define CMD_OTA_START						0xFF01	//client -> server
 #define CMD_OTA_END							0xFF02	//client -> server
 
-#define CMD_OTA_START_EXT					0xFF03	//client -> server
-#define CMD_OTA_FW_VERSION_REQ				0xFF04
-#define CMD_OTA_FW_VERSION_RSP				0xFF05
-#define CMD_OTA_RESULT						0xFF06	//server -> client
-
-
-
-
-
 /**
- * @brief 	Multiple boot address enumarion
+ * @brief 	Extended OTA command
  */
-typedef enum{
-	MULTI_BOOT_ADDR_0x20000 	= 0x20000,	//128 K
-	MULTI_BOOT_ADDR_0x40000		= 0x40000,  //256 K
-	MULTI_BOOT_ADDR_0x80000	    = 0x80000,  //512 K
-}multi_boot_addr_e;
+#define CMD_OTA_START_EXT					0xFF03	//client -> server
+#define CMD_OTA_FW_VERSION_REQ				0xFF04	//client -> server
+#define CMD_OTA_FW_VERSION_RSP				0xFF05	//server -> client
+#define CMD_OTA_RESULT						0xFF06	//server -> client
+#define CMD_OTA_SCHEDULE_PDU_NUM			0xFF08	//server -> client
+#define CMD_OTA_SCHEDULE_FW_SIZE			0xFF09	//server -> client
 
 
 
@@ -75,6 +70,10 @@ enum{
 	OTA_DATA_PACKET_TIMEOUT,	   			//time interval between two consequent packet exceed a value(user can adjust this value)
  	OTA_TIMEOUT,							//OTA flow total timeout
  	OTA_FAIL_DUE_TO_CONNECTION_TERMIANTE,	//OTA fail due to current connection terminate(maybe connection timeout or local/peer device terminate connection)
+	OTA_MCU_NOT_SUPPORTED,					//MCU does not support this OTA mode
+
+	//0x10
+	OTA_LOGIC_ERR,							//software logic error, please contact FAE of TeLink
 };
 
 
@@ -86,15 +85,6 @@ enum{
 typedef struct {
 	u16  	ota_cmd;
 } ota_start_t;
-
-/**
- *  @brief data structure of OTA command "CMD_OTA_START_EXT"
- */
-typedef struct {
-	u16  	ota_cmd;
-	u8		pdu_length;			//must be: 16*n(n is in range of 1 ~ 15); pdu_length: 16,32,48,...240
-	u8		version_compare;	//0: no version compare; 1: only higher version can replace lower version
-} ota_startExt_t;
 
 
 /**
@@ -108,11 +98,23 @@ typedef struct {
 
 
 /**
+ *  @brief data structure of OTA command "CMD_OTA_START_EXT"
+ */
+typedef struct {
+	u16  	ota_cmd;
+	u8		pdu_length;			//must be: 16*n(n is in range of 1 ~ 15); pdu_length: 16,32,48,...240
+	u8		version_compare;	//0: no version compare; 1: only higher version can replace lower version
+	u8		rsvd[16];			//reserved for future use
+} ota_startExt_t;
+
+
+/**
  *  @brief data structure of OTA command "CMD_OTA_RESULT"
  */
 typedef struct {
 	u16  	ota_cmd;
 	u8		result;
+	u8		rsvd;
 } ota_result_t;
 
 
@@ -137,6 +139,24 @@ typedef struct {
 } ota_versionRsp_t;
 
 
+/**
+ *  @brief data structure of OTA command "CMD_OTA_SCHEDULE_PDU_NUM"
+ */
+typedef struct {
+	u16  	ota_cmd;
+	u16  	success_pdu_cnt;	// successful OTA PDU number
+} ota_sche_pdu_num_t;
+
+/**
+ *  @brief data structure of OTA command "CMD_OTA_SCHEDULE_FW_SIZE"
+ */
+typedef struct {
+	u16  	ota_cmd;
+	u32		success_fw_size;	// successful OTA firmware size (unit: Byte)
+} ota_sche_fw_size_t;
+
+
+
 
 typedef struct{
 	u16 adr_index;
@@ -145,9 +165,33 @@ typedef struct{
 }ota_pdu16_t;
 
 
+/**
+ * @brief      ota crc32 related fuinction.
+ * @param[in]  crc: initial crc value.
+ * @param[in]  input: input data.
+ * @param[in]  table: crc calculate table.
+ * @param[in]  len: data length.
+ * @return     crc result.
+ */
 unsigned long crc32_half_cal(unsigned long crc, unsigned char* input, unsigned long* table, int len);
+
+/**
+ * @brief      ota crc32 related fuinction.
+ * @param[in]  crc: initial crc value.
+ * @param[in]  input: input data.
+ * @param[in]  table: crc calculate table.
+ * @param[in]  len: data length.
+ * @return     crc result.
+ */
 unsigned long crc32_cal(unsigned long crc, unsigned char* input, unsigned long* table, int len);
 
+/**
+ * @brief      ota crc16 related fuinction.
+ * @param[in]  pD: input data.
+ * @param[in]  len: data length.
+ * @return     crc result.
+ */
+unsigned short crc16 (unsigned char *pD, int len);
 
 
 #endif /* OTA_H_ */

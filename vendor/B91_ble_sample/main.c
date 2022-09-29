@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	main.c
+ * @file     main.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,12 +20,16 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "tl_common.h"
 #include "drivers.h"
 #include "stack/ble/ble.h"
 #include "app.h"
 
-
+#if(FREERTOS_ENABLE)
+#include <FreeRTOS.h>
+#include <task.h>
+#endif
 /**
  * @brief		BLE SDK RF interrupt handler.
  * @param[in]	none
@@ -61,6 +65,22 @@ void stimer_irq_handler(void)
 
 
 
+#if (FREERTOS_ENABLE)
+	#if(!TEST_CONN_CURRENT_ENABLE)
+		static void led_task(void *pvParameters){
+			reg_gpio_pb_oen &= ~ GPIO_PB7;
+			while(1){
+				reg_gpio_pb_out |= GPIO_PB7;
+				printf("LED ON;\r\n");
+				vTaskDelay(1000);
+				printf("LED OFF;\r\n");
+				reg_gpio_pb_out &= ~GPIO_PB7;
+				vTaskDelay(1000);
+			}
+		}
+	#endif
+void proto_task( void *pvParameters );
+#endif
 
 /**
  * @brief		This is main function
@@ -87,7 +107,7 @@ _attribute_ram_code_ int main (void)   //must on ramcode
 
 	if(!deepRetWakeUp){//read flash size
 		#if (BATT_CHECK_ENABLE)
-			user_init_battery_power_check();
+			user_battery_power_check();
 		#endif
 
 		blc_readFlashSize_autoConfigCustomFlashSector();
@@ -109,14 +129,39 @@ _attribute_ram_code_ int main (void)   //must on ramcode
 	}
 	else{ //MCU power_on or wake_up from deepSleep mode
 		user_init_normal();
+#if (FREERTOS_ENABLE)
+		extern void blc_ll_set_freertos_en(u8 en);
+		blc_ll_set_freertos_en(1);
+#endif
 	}
 
+#if (FREERTOS_ENABLE)
+
+	extern void vPortRestoreTask();
+	if( deepRetWakeUp ){
+		printf("enter restor work.\r\n");
+		vPortRestoreTask();
+
+	}else{
+		#if(!TEST_CONN_CURRENT_ENABLE)
+			xTaskCreate( led_task, "tLed", configMINIMAL_STACK_SIZE, (void*)0, (tskIDLE_PRIORITY+1), 0 );
+		#endif
+		xTaskCreate( proto_task, "tProto", 2*configMINIMAL_STACK_SIZE, (void*)0, (tskIDLE_PRIORITY+1), 0 );
+	//	xTaskCreate( ui_task, "tUI", configMINIMAL_STACK_SIZE, (void*)0, tskIDLE_PRIORITY + 1, 0 );
+		vTaskStartScheduler();
+	}
+#else
 	irq_enable();
 
 	while (1) {
 		main_loop ();
 	}
 	return 0;
+#endif
 }
 
-
+#if (FREERTOS_ENABLE)
+//  !!! should notify those tasks that ulTaskNotifyTake long time and should be wakeup every time PM wakeup
+void vPortWakeupNotify(){
+}
+#endif

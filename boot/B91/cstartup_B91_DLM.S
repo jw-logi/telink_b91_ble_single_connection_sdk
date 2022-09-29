@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	cstartup_B91_DLM.S
+ * @file     cstartup_B91_DLM.S
  *
- * @brief	This is the boot file for B91
+ * @brief    This is the boot file for BLE SDK
  *
- * @author	S.P
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #if 0	/*default is close*/
     .section .vectors, "ax"
 
@@ -69,6 +70,16 @@ _START:
     .option norelax
     la     gp, __global_pointer$
     .option pop
+
+/*
+* swire usb enable default.when dp and dm use as GPIO, it has a risk to trigger the swire through usb function
+* to do something unexcept when toggle dp pin
+*/
+_SWS_USB_DIS:
+	lui		t0, 0x80100
+	addi	t0 , t0 , 0x700
+	li		t1, 0x40
+	sb		t1, 0x501(t0)  //0x80100c01 -> 0x40  <7>: 0 swire_usb_dis
 
 	/* Initialize stack pointer */
     la     t0, _STACK_TOP
@@ -260,6 +271,16 @@ _ISTART:
 
     la     gp, __global_pointer$
     .option pop
+
+/*
+* swire usb enable default.when dp and dm use as GPIO, it has a risk to trigger the swire through usb function
+* to do something unexcept when toggle dp pin
+*/
+_ISWS_USB_DIS:
+	lui		t0, 0x80100
+	addi	t0 , t0 , 0x700
+	li		t1, 0x40
+	sb		t1, 0x501(t0)  //0x80100c01 -> 0x40  <7>: 0 swire_usb_dis
 
 	/* Initialize stack pointer */
     la     t0, _STACK_TOP

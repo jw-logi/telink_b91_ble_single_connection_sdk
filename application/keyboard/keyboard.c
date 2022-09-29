@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	keyboard.c
+ * @file     keyboard.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -29,17 +29,17 @@
 
 #if (defined(KB_DRIVE_PINS) && defined(KB_SCAN_PINS))
 
-u32 drive_pins[] = KB_DRIVE_PINS;
-u32 scan_pins[] = KB_SCAN_PINS;
+const u32 drive_pins[] = KB_DRIVE_PINS;
+const u32 scan_pins[] = KB_SCAN_PINS;
 
 #if (STUCK_KEY_PROCESS_ENABLE)
 unsigned char stuckKeyPress[ARRAY_SIZE(drive_pins)];
 #endif
 
-kb_data_t	kb_event;
-kb_data_t	kb_event_cache;
-unsigned char  deepback_key_state;
-u32 deepback_key_tick;
+_attribute_data_retention_	kb_data_t	kb_event;
+_attribute_data_retention_	kb_data_t	kb_event_cache;
+_attribute_data_retention_	unsigned char  deepback_key_state;
+_attribute_data_retention_	u32 deepback_key_tick;
 
 #ifndef		SCAN_PIN_50K_PULLUP_ENABLE
 #define		SCAN_PIN_50K_PULLUP_ENABLE		0
@@ -200,7 +200,7 @@ kb_k_mp_t *	kb_p_map[4] = {
 
 #endif
 
-u32	scan_pin_need;
+_attribute_data_retention_	u32	scan_pin_need;
 
 static unsigned char 	kb_is_fn_pressed = 0;
 

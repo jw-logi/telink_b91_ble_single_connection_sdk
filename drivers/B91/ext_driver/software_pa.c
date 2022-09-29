@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	software_pa.c
+ * @file     software_pa.c
  *
- * @brief	This is the source file for B91
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE Group
- * @date	2020
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "compiler.h"
 #include "software_pa.h"
 #include "../gpio.h"
@@ -32,21 +33,15 @@ void app_rf_pa_handler(int type)
 {
 #if(PA_ENABLE)
 	if(type == PA_TYPE_TX_ON){
-	    gpio_set_output_en(PA_RXEN_PIN, 0);
 	    gpio_write(PA_RXEN_PIN, 0);
-	    gpio_set_output_en(PA_TXEN_PIN, 1);
 	    gpio_write(PA_TXEN_PIN, 1);
 	}
 	else if(type == PA_TYPE_RX_ON){
-	    gpio_set_output_en(PA_TXEN_PIN, 0);
 	    gpio_write(PA_TXEN_PIN, 0);
-	    gpio_set_output_en(PA_RXEN_PIN, 1);
 	    gpio_write(PA_RXEN_PIN, 1);
 	}
 	else{
-	    gpio_set_output_en(PA_RXEN_PIN, 0);
 	    gpio_write(PA_RXEN_PIN, 0);
-	    gpio_set_output_en(PA_TXEN_PIN, 0);
 	    gpio_write(PA_TXEN_PIN, 0);
 	}
 #endif
@@ -57,11 +52,11 @@ void rf_pa_init(void)
 {
 #if(PA_ENABLE)
     gpio_set_func(PA_TXEN_PIN, AS_GPIO);
-    gpio_set_output_en(PA_TXEN_PIN, 0);
+    gpio_set_output_en(PA_TXEN_PIN, 1);
     gpio_write(PA_TXEN_PIN, 0);
 
     gpio_set_func(PA_RXEN_PIN, AS_GPIO);
-    gpio_set_output_en(PA_RXEN_PIN, 0);
+    gpio_set_output_en(PA_RXEN_PIN, 1);
     gpio_write(PA_RXEN_PIN, 0);
 
     blc_rf_pa_cb = app_rf_pa_handler;

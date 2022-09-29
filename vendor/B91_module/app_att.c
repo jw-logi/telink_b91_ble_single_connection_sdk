@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	app_att.c
+ * @file     app_att.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "tl_common.h"
 #include "drivers.h"
 #include "stack/ble/ble.h"
@@ -66,9 +67,9 @@ static const gap_periConnectParams_t my_periConnParameters = {8, 11, 0, 1000};
 
 static const u16 my_gattServiceUUID = SERVICE_UUID_GENERIC_ATTRIBUTE;
 
-static u16 serviceChangeVal[2] = {0};
+_attribute_data_retention_	static u16 serviceChangeVal[2] = {0};
 
-static u8 serviceChangeCCC[2] = {0,0};
+_attribute_data_retention_	static u8 serviceChangeCCC[2] = {0,0};
 
 #define MY_DEV_NAME                     "KModule"
 #define MAX_DEV_NAME_LEN 				18
@@ -86,8 +87,8 @@ static const u8 my_PnPtrs [] = {0x02, 0x8a, 0x24, 0x66, 0x82, 0x01, 0x00};
 //////////////////////// OTA  ////////////////////////////////////////////////////
 static const  u8 my_OtaServiceUUID[16]				= WRAPPING_BRACES(TELINK_OTA_UUID_SERVICE);
 static const  u8 my_OtaUUID[16]						= WRAPPING_BRACES(TELINK_SPP_DATA_OTA);
-static 		  u8 my_OtaData 						= 0x00;
-static 		  u8 otaDataCCC[2] 						= {0,0};
+_attribute_data_retention_	static 		  u8 my_OtaData 						= 0x00;
+_attribute_data_retention_	static 		  u8 otaDataCCC[2] 						= {0,0};
 static const  u8 my_OtaName[] 						= {'O', 'T', 'A'};
 
 ////////////////////// SPP ////////////////////////////////////
@@ -97,12 +98,12 @@ static const u8 TelinkSppDataClient2ServerUUID[16]      = WRAPPING_BRACES(TELINK
 
 
 // Spp data from Server to Client characteristic variables
-static u8 SppDataServer2ClientDataCCC[2]  				= {0};
+_attribute_data_retention_	static u8 SppDataServer2ClientDataCCC[2]  				= {0};
 //this array will not used for sending data(directly calling HandleValueNotify API), so cut array length from 20 to 1, saving some SRAM
-static u8 SppDataServer2ClientData[1] 					= {0};  //SppDataServer2ClientData[20]
+_attribute_data_retention_	static u8 SppDataServer2ClientData[1] 					= {0};  //SppDataServer2ClientData[20]
 // Spp data from Client to Server characteristic variables
 //this array will not used for receiving data(data processed by Attribute Write CallBack function), so cut array length from 20 to 1, saving some SRAM
-static u8 SppDataClient2ServerData[1] 					= {0};  //SppDataClient2ServerData[20]
+_attribute_data_retention_	static u8 SppDataClient2ServerData[1] 					= {0};  //SppDataClient2ServerData[20]
 
 
 //SPP data descriptor
@@ -171,7 +172,7 @@ static const u8 my_OtaCharVal[19] = {
  */
 int module_onReceiveData(u16 connHandle, rf_packet_att_write_t *p)
 {
-	u8 len = p->l2capLen - 3;
+	u16 len = p->l2capLen - 3;
 	if(len > 0)
 	{
 		spp_event_t *pEvt =  (spp_event_t *)p;

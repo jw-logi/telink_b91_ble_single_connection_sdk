@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	stimer.h
+ * @file     stimer.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 /**	@page STIMER
  *
  *	Introduction
@@ -42,7 +43,9 @@
 /**********************************************************************************************************************
  *                                           global macro                                                             *
  *********************************************************************************************************************/
-
+#ifndef SYS_TIMER_AUTO_MODE
+#define SYS_TIMER_AUTO_MODE     			1
+#endif
 /**********************************************************************************************************************
  *                                         global data type                                                           *
  *********************************************************************************************************************/
@@ -132,7 +135,11 @@ static inline void stimer_set_tick(unsigned int tick)
  */
 static inline void stimer_enable(void)
 {
+#if SYS_TIMER_AUTO_MODE
+	reg_system_ctrl |= FLD_SYSTEM_TIMER_AUTO;
+#else
 	reg_system_ctrl |= FLD_SYSTEM_TIMER_EN;
+#endif
 }
 
 
@@ -142,7 +149,11 @@ static inline void stimer_enable(void)
  */
 static inline void stimer_disable(void)
 {
+#if SYS_TIMER_AUTO_MODE
+	reg_system_ctrl &= ~(FLD_SYSTEM_TIMER_AUTO);
+#else
 	reg_system_ctrl &= ~(FLD_SYSTEM_TIMER_EN);
+#endif
 }
 
 /*

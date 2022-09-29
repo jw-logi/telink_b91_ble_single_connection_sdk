@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	default_att.c
+ * @file     default_att.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "tl_common.h"
 #include "drivers.h"
 #include "stack/ble/ble.h"
@@ -79,19 +80,19 @@ static const u16 my_gattServiceUUID = SERVICE_UUID_GENERIC_ATTRIBUTE;
 
 static const gap_periConnectParams_t my_periConnParameters = {8, 11, 0, 1000};
 
-static u16 serviceChangeVal[2] = {0};
+_attribute_data_retention_	static u16 serviceChangeVal[2] = {0};
 
-static u8 serviceChangeCCC[2] = {0,0};
+_attribute_data_retention_	static u8 serviceChangeCCC[2] = {0,0};
 
-static const u8 my_devName[] = {'e','S','a','m','p','l','e'};
+static const u8 my_devName[] = {'f', 'e', 'a', 't', 'u', 'r', 'e'};
 
 static const u8 my_PnPtrs [] = {0x02, 0x8a, 0x24, 0x66, 0x82, 0x01, 0x00};
 
 //////////////////////// Battery /////////////////////////////////////////////////
 static const u16 my_batServiceUUID        = SERVICE_UUID_BATTERY;
 static const u16 my_batCharUUID       	  = CHARACTERISTIC_UUID_BATTERY_LEVEL;
-static u8 batteryValueInCCC[2] = {0,0};
-static u8 my_batVal[1] 	= {99};
+_attribute_data_retention_	static u8 batteryValueInCCC[2] = {0,0};
+_attribute_data_retention_	static u8 my_batVal[1] 	= {99};
 
 //////////////////////// HID /////////////////////////////////////////////////////
 
@@ -106,32 +107,32 @@ static const u16 hidinformationUUID       = CHARACTERISTIC_UUID_HID_INFORMATION;
 static const u16 hidCtrlPointUUID         = CHARACTERISTIC_UUID_HID_CONTROL_POINT;
 static const u16 hidIncludeUUID           = GATT_UUID_INCLUDE;
 
-static u8 protocolMode 			  = DFLT_HID_PROTOCOL_MODE;
+_attribute_data_retention_	static u8 protocolMode 			  = DFLT_HID_PROTOCOL_MODE;
 
 // Key in Report characteristic variables
-static u8 reportKeyIn[8];
-static u8 reportKeyInCCC[2] = {0,0};
+_attribute_data_retention_	static u8 reportKeyIn[8];
+_attribute_data_retention_	static u8 reportKeyInCCC[2] = {0,0};
 // HID Report Reference characteristic descriptor, key input
-static u8 reportRefKeyIn[2] =
+_attribute_data_retention_	static u8 reportRefKeyIn[2] =
              { HID_REPORT_ID_KEYBOARD_INPUT, HID_REPORT_TYPE_INPUT };
 
 // Key out Report characteristic variables
-static u8 reportKeyOut[1];
-static u8 reportRefKeyOut[2] =
+_attribute_data_retention_	static u8 reportKeyOut[1];
+_attribute_data_retention_	static u8 reportRefKeyOut[2] =
              { HID_REPORT_ID_KEYBOARD_INPUT, HID_REPORT_TYPE_OUTPUT };
 
 // Consumer Control input Report
-static u8 reportConsumerControlIn[2];
-static u8 reportConsumerControlInCCC[2] = {0,0};
-static u8 reportRefConsumerControlIn[2] =
+_attribute_data_retention_	static u8 reportConsumerControlIn[2];
+_attribute_data_retention_	static u8 reportConsumerControlInCCC[2] = {0,0};
+_attribute_data_retention_	static u8 reportRefConsumerControlIn[2] =
 			 { HID_REPORT_ID_CONSUME_CONTROL_INPUT, HID_REPORT_TYPE_INPUT };
 
 // Boot Keyboard Input Report
-static u8 bootKeyInReport;
-static u8 bootKeyInReportCCC[2] = {0,0};
+_attribute_data_retention_	static u8 bootKeyInReport;
+_attribute_data_retention_	static u8 bootKeyInReportCCC[2] = {0,0};
 
 // Boot Keyboard Output Report
-static u8 bootKeyOutReport;
+_attribute_data_retention_	static u8 bootKeyOutReport;
 
 // HID Information characteristic
 static const u8 hidInformation[] =
@@ -142,7 +143,7 @@ static const u8 hidInformation[] =
 };
 
 // HID Control Point characteristic
-static u8 controlPoint;
+_attribute_data_retention_	static u8 controlPoint;
 
 // HID Report Map characteristic
 // Keyboard report descriptor (using format for Boot interface descriptor)
@@ -213,14 +214,14 @@ static const u8 reportMap[] =
 };
 
 // HID External Report Reference Descriptor for report map
-static u16 extServiceUUID;
+_attribute_data_retention_	static u16 extServiceUUID;
 
 
 //////////////////////// OTA //////////////////////////////////
 static const  u8 my_OtaServiceUUID[16]				= WRAPPING_BRACES(TELINK_OTA_UUID_SERVICE);
 static const  u8 my_OtaUUID[16]						= WRAPPING_BRACES(TELINK_SPP_DATA_OTA);
-static 		  u8 my_OtaData 						= 0x00;
-static 		  u8 otaDataCCC[2] 						= {0,0};
+_attribute_data_retention_	static 		  u8 my_OtaData 						= 0x00;
+_attribute_data_retention_	static 		  u8 otaDataCCC[2] 						= {0,0};
 static const  u8 my_OtaName[] 						= {'O', 'T', 'A'};
 
 

@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ext_pm.h
+ * @file     ext_pm.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE Group
- * @date	2020
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 #ifndef DRIVERS_B91_DRIVER_EXT_EXT_PM_H_
 #define DRIVERS_B91_DRIVER_EXT_EXT_PM_H_
 
-#include "../pm.h"
+#include "../lib/include/pm.h"
 #include "types.h"
 
 #ifndef	PM_32k_RC_CALIBRATION_ALGORITHM_EN
@@ -79,7 +79,7 @@ typedef struct{
 	unsigned char ext_cap_en;    //24xtal  cap
 	unsigned char pad32k_en;
 	unsigned char pm_enter_en;
-	unsigned char rsvd;
+	unsigned char adc_efuse_calib_flag;
 }misc_para_t;
 
 extern  _attribute_aligned_(4) misc_para_t 				blt_miscParam;
@@ -98,22 +98,22 @@ void bls_pm_registerFuncBeforeSuspend (suspend_handler_t func );
  * 	      when MCU wakeup from deepsleep, read the information by by calling analog_read function
  * 	      Reset these analog registers only by power cycle
  */
-#define DEEP_ANA_REG0                       0x39 //initial value =0x00
-#define DEEP_ANA_REG1                       0x3a //initial value =0x00
-#define DEEP_ANA_REG2                       0x3b //initial value =0x00
-#define DEEP_ANA_REG3                      	0x3c //initial value =0x00
-#define DEEP_ANA_REG4                       0x3d //initial value =0x00
-#define DEEP_ANA_REG5                       0x3e //initial value =0x00
-#define DEEP_ANA_REG6                       0x3f //initial value =0x0f
+#define DEEP_ANA_REG0                       PM_ANA_REG_POWER_ON_CLR_BUF0 //initial value =0x00	[Bit0][Bit1] is already occupied. The customer cannot change!
+#define DEEP_ANA_REG1                       PM_ANA_REG_POWER_ON_CLR_BUF1 //initial value =0x00
+#define DEEP_ANA_REG2                       PM_ANA_REG_POWER_ON_CLR_BUF2 //initial value =0x00
+#define DEEP_ANA_REG3                      	PM_ANA_REG_POWER_ON_CLR_BUF3 //initial value =0x00
+#define DEEP_ANA_REG4                       PM_ANA_REG_POWER_ON_CLR_BUF4 //initial value =0x00
+#define DEEP_ANA_REG5                       PM_ANA_REG_POWER_ON_CLR_BUF5 //initial value =0x00
+#define DEEP_ANA_REG6                       PM_ANA_REG_POWER_ON_CLR_BUF6 //initial value =0x0f
 
 /**
  * @brief these analog register can store data in deepsleep mode or deepsleep with SRAM retention mode.
  * 	      Reset these analog registers by watchdog, chip reset, RESET Pin, power cycle
  */
 
-#define DEEP_ANA_REG7                       0x38 //initial value =0xff
+#define DEEP_ANA_REG7                       PM_ANA_REG_WD_CLR_BUF0 //initial value =0xff	[Bit0] is already occupied. The customer cannot change!
 
-//ana3e system used, user can not use
+//ana39 system used, user can not use
 #define SYS_DEEP_ANA_REG 					PM_ANA_REG_POWER_ON_CLR_BUF0
 
 
@@ -241,6 +241,19 @@ static inline int pm_get_mcu_status(void)
 	return g_pm_status_info.mcu_status;
 }
 
+
+
+/**
+ * @brief   internal oscillator or crystal calibration for environment change such as voltage, temperature
+ * 			to keep some critical PM or RF performance stable
+ * 			attention: this is a stack API, user can not call it
+ * @param	none
+ * @return	none
+ */
+void mcu_oscillator_crystal_calibration(void);
+
+
+
 #define cpu_set_gpio_wakeup				pm_set_gpio_wakeup
 
 /**********************************  Internal APIs (not for user)***************************************************/
@@ -251,5 +264,9 @@ extern  unsigned int 			g_pm_tick_32k_cur;
 extern  unsigned char       	g_pm_long_suspend;
 extern  unsigned int 			g_pm_multi_addr;
 
+
+extern unsigned int	ota_program_bootAddr;
+extern unsigned int	ota_firmware_max_size;
+extern unsigned int	ota_program_offset;
 
 #endif /* DRIVERS_B91_DRIVER_EXT_EXT_PM_H_ */

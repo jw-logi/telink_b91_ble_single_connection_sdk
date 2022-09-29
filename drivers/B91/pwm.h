@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	pwm.h
+ * @file     pwm.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,11 +20,12 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef PWM_H_
 #define PWM_H_
+#include <reg_include/register.h>
 #include "gpio.h"
 #include "dma.h"
-#include "reg_include/register_b91.h"
 
 #define get_pwmid(gpio)     ((gpio==PWM_PWM0_PB4) ? 0 : (  \
                      (gpio==PWM_PWM0_PC0) 	? 0 : (  \
@@ -123,7 +124,6 @@ typedef enum{
  */
 typedef enum {
 
-	PWM_CLOCK_32K_CHN_NONE = 0x00,
 	PWM_CLOCK_32K_CHN_PWM0 = 0x01,
 	PWM_CLOCK_32K_CHN_PWM1 = 0x02,
 	PWM_CLOCK_32K_CHN_PWM2 = 0x04,
@@ -205,32 +205,26 @@ static inline void pwm_32k_chn_update_duty_cycle(void){
 }
 
 /**
- * @brief     This function servers to start the pwm.
- * @param[in] id - variable of enum to select the pwm number.
+ * @brief     This function servers to start the pwm,can have more than one PWM open at the same time.
+ * @param[in] en - variable of enum to select the pwm number.
  * @return	  none.
  */
-static inline void pwm_start(pwm_id_e id){
-	if(PWM0_ID == id){
-		BM_SET(reg_pwm0_enable, BIT(0));
-	}
-	else{
-		BM_SET(reg_pwm_enable, BIT(id));
-	}
+static inline void pwm_start(pwm_en_e en){
+
+		BM_SET(reg_pwm_enable, en);
+
 }
 
 
 /**
- * @brief     This function servers to stop the pwm.
- * @param[in] id - variable of enum to select the pwm number.
+ * @brief     This function servers to stop the pwm,can have more than one PWM stop at the same time.
+ * @param[in] en - variable of enum to select the pwm number.
  * @return	  none.
  */
-static inline void pwm_stop(pwm_id_e id){
-	if(PWM0_ID == id){
-		BM_CLR(reg_pwm0_enable, BIT(0));
-	}
-	else{
-		BM_CLR(reg_pwm_enable, BIT(id));
-	}
+static inline void pwm_stop(pwm_en_e en){
+
+		BM_CLR(reg_pwm_enable, en);
+
 }
 
 
@@ -399,8 +393,8 @@ static inline void pwm_set_pwm0_tcmp_and_tmax_shadow(unsigned short max_tick, un
  * @return	  none.
  */
 static inline void pwm_set_pwm0_pulse_num(unsigned short pulse_num){
-		reg_pwm0_pulse_num0 = pulse_num;
-		reg_pwm0_pulse_num1 = pulse_num>>8;
+		reg_pwm0_pulse_num = pulse_num;
+
 }
 
 
@@ -492,6 +486,9 @@ static inline void pwm_set_pwm0_ir_fifo_cfg_data(unsigned short pulse_num, unsig
  * @brief     This function servers to configure DMA channel and some configures.
  * @param[in] chn - to select the DMA channel.
  * @return    none
+ * @note      In the case that the DMA transfer is not completed(bit 0 of reg_dma_ctr0(chn): 1-the transmission has not been completed,0-the transmission is completed), re-calling the DMA-related functions may cause problems.
+ *            If you must do this, you must perform the following sequence:
+ *            1. dma_chn_dis(chn) 2.pwm_reset()3.pwm_set_dma_buf()/pwm_ir_dma_mode_start()
  */
 void pwm_set_dma_config(dma_chn_e chn);
 
@@ -540,6 +537,28 @@ void pwm_set_dma_chain_llp(dma_chn_e chn,unsigned short * src_addr, unsigned int
 void pwm_set_tx_dma_add_list_element(dma_chn_e chn,dma_chain_config_t *config_addr,dma_chain_config_t *llponit ,unsigned short * src_addr,unsigned int data_len);
 
 
+/**
+ * @brief     This function servers to disable pwm clock source 32K.
+ *    	      If you use 32K as the PWM clock source, you can work in suspend mode.
+ *    	      but the 32K clock source cannot be divided and can only work in continuous mode and counting mode
+ * @param[in] pwm_32K_en_chn - This variable is used to select the specific PWM channel.
+ * @return	  none.
+ */
+
+static inline void pwm_32k_chn_dis(pwm_clk_32k_en_chn_e pwm_32K_en_chn)
+{
+    BM_CLR(reg_pwm_mode32k, pwm_32K_en_chn);
+}
+
+/**
+ * @brief      This function reset pwm module,all pwm logic will be reset.
+ * @return     none
+ */
+static inline void pwm_reset(void)
+{
+	reg_rst0 &= (~FLD_RST0_PWM );
+	reg_rst0 |=FLD_RST0_PWM;
+}
 
 #endif
 

@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	rc_ir_learn.h
+ * @file     rc_ir_learn.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef RC_IR_LEARN_H_
 #define RC_IR_LEARN_H_
 #if (FEATURE_TEST_MODE == TEST_IR)
@@ -29,10 +30,10 @@
 #define  GPIO_IR_LEARN_IN	                 GPIO_PE1
 
 /************************************************************************************************
-* ¡¾define¡¿IR_LEARN_FREQUENCY_RANGE_MODE :														*
+* defineIR_LEARN_FREQUENCY_RANGE_MODE :														*
 * Choose IR Learn frequency range that device supported											*
-* ¡¾define¡¿IR_LEARN_MAX_FREQUENCY: Max carrier frequency that device support to do IR learn		*
-* ¡¾define¡¿IR_LEARN_MIN_FREQUENCY: Min carrier frequency that device support to do IR learn		*
+* defineIR_LEARN_MAX_FREQUENCY: Max carrier frequency that device support to do IR learn		*
+* defineIR_LEARN_MIN_FREQUENCY: Min carrier frequency that device support to do IR learn		*
 ************************************************************************************************/
 
 #define			IR_LEARN_MAX_FREQUENCY			40000
@@ -44,7 +45,7 @@
 #define			IR_LEARN_CARRIER_MAX_HIGH_TICK	IR_LEARN_CARRIER_MAX_CYCLE/3
 
 /************************************************************************************************
-* ¡¾define¡¿PARAMETER SETTING :																	*
+* definePARAMETER SETTING :																	*
 * Related parameter setting to change IR learn result											*
 ************************************************************************************************/
 

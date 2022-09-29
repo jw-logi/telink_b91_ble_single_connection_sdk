@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	pwm.c
+ * @file     pwm.c
  *
- * @brief	This is the source file for B91
+ * @brief    This is the source file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "pwm.h"
 
 
@@ -70,6 +71,9 @@ void pwm_set_pin(pwm_pin_e pin)
  * @brief     This function servers to configure DMA channel and some configures.
  * @param[in] chn - to select the DMA channel.
  * @return    none
+ * @note      In the case that the DMA transfer is not completed(bit 0 of reg_dma_ctr0(chn): 1-the transmission has not been completed,0-the transmission is completed), re-calling the DMA-related functions may cause problems.
+ *            If you must do this, you must perform the following sequence:
+ *            1. dma_chn_dis(chn) 2.pwm_reset()3.pwm_set_dma_buf()/pwm_ir_dma_mode_start()
  */
 void pwm_set_dma_config(dma_chn_e chn)
 {
@@ -86,7 +90,7 @@ void pwm_set_dma_config(dma_chn_e chn)
  */
 void pwm_set_dma_buf(dma_chn_e chn,unsigned int buf_addr,unsigned int len)
 {
-	dma_set_address( chn,convert_ram_addr_cpu2bus(buf_addr),reg_pwm_data_buf_adr);
+	dma_set_address( chn,buf_addr,reg_pwm_data_buf_adr);
 	dma_set_size(chn,len,DMA_WORD_WIDTH);
 }
 
@@ -113,8 +117,13 @@ void pwm_ir_dma_mode_start(dma_chn_e chn)
  */
 void pwm_set_dma_chain_llp(dma_chn_e chn,unsigned short * src_addr, unsigned int data_len,dma_chain_config_t * head_of_list)
 {
+	/*1.DMA is not finished yet, need to disable dma before writing to the dma register.
+	 *2.In order not to affect the interaction between pwm and dma, reset pwm is required after dma is disabled.
+     * confirmed by jianzhi,modify by minghai.duan(20211025)*/
+	 dma_chn_dis(chn);
+	 pwm_reset();
 	 dma_config(chn,&pwm_tx_dma_config);
-	 dma_set_address( chn,convert_ram_addr_cpu2bus(src_addr),reg_pwm_data_buf_adr);
+	 dma_set_address( chn,(unsigned int)src_addr,reg_pwm_data_buf_adr);
 	 dma_set_size(chn,data_len,DMA_WORD_WIDTH);
 	 reg_dma_llp(chn)=(unsigned int)convert_ram_addr_cpu2bus(head_of_list);
 }

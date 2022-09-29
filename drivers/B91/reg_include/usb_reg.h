@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	usb_reg.h
+ * @file     usb_reg.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef USB_REG_H
 #define USB_REG_H
-#include "../sys.h"
+#include "soc.h"
 
 /*******************************      usb registers: 0x100800      ******************************/
 #define reg_ctrl_ep_ptr			REG_ADDR8(0x100800)

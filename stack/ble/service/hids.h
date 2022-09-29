@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	hids.h
+ * @file     hids.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #pragma once
 
 
@@ -52,6 +53,9 @@
 #define HID_REPORT_ID_AUDIO_SECND_INPUT                 11//251
 #define HID_REPORT_ID_AUDIO_THIRD_INPUT                 12//247
 
+
+#define HID_REPORT_ID_OTA_INPUT							0x20
+#define HID_REPORT_ID_OTA_OUTPUT						0x21
 
 
 /**

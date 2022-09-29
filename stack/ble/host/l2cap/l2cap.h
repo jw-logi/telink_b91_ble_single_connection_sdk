@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	l2cap.h
+ * @file     l2cap.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,16 +20,18 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef STACK_BLE_L2CAP_L2CAP_H_
 #define STACK_BLE_L2CAP_L2CAP_H_
 
 
 
 
+#define	L2CAP_RX_BUFF_LEN_MAX			  (256)
 //header(2)+l2cap_len(2)+cid(2)+Attribute_data[ATT_MTU]
 #define	ATT_RX_MTU_SIZE_MAX		  		  (250) //dft ATT_MTU_MAX: 250
 //l2cap buffer max: header(2)+l2cap_len(2)+cid(2)+ATT_MTU_MAX(250).
-#define	L2CAP_RX_BUFF_LEN_MAX			  (256)
+
 
 
 
@@ -129,8 +131,17 @@ void 		blc_l2cap_registerConnUpdateRspCb(l2cap_conn_update_rsp_callback_t cb);
 void 		blc_l2cap_initMtuBuffer(u8 *pMTU_rx_buff, u16 mtu_rx_size, u8 *pMTU_tx_buff, u16 mtu_tx_size);
 
 
-
-
+/**
+ * @brief		This function is used to push l2cap layer data to controller
+ * @param[in]	connHandle - connection handle
+ * @param[in]	cid   - cid part.
+ * @param[in]	*format - the pointer of tx buffer.
+ * @param[in]	format_len   - the size of of tx buffer.
+ * @param[in]	pDate - buffer that want to send.
+ * @param[in]	data_len - data length.
+ * @return		none.
+ */
+ble_sts_t   blc_l2cap_pushData_2_controller (u16 connHandle, u16 cid, u8 *format, int format_len, u8 *pDate, int data_len);
 
 
 

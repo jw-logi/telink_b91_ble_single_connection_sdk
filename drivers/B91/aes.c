@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	aes.c
+ * @file     aes.c
  *
- * @brief	This is the source file for B91
+ * @brief    This is the source file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "aes.h"
 #include "compiler.h"
 
@@ -43,6 +44,7 @@
  *********************************************************************************************************************/
 _attribute_aes_data_sec_ unsigned int aes_data_buff[8];
 unsigned int aes_base_addr = 0xc0000000;
+static unsigned int embase_offset = 0;    //the embase address offset with IRAM head address.
 /**********************************************************************************************************************
  *                                              local variable                                                     *
  *********************************************************************************************************************/
@@ -76,7 +78,7 @@ void aes_set_key_data(unsigned char *key, unsigned char* data)
 		aes_data_buff[i] = temp;
 	}
 
-	reg_aes_ptr = (unsigned int)aes_data_buff;
+	reg_aes_ptr = (unsigned int)aes_data_buff - embase_offset;  //the aes data ptr is base on embase address.
 }
 
 /**
@@ -106,7 +108,7 @@ int aes_encrypt(unsigned char *key, unsigned char* plaintext, unsigned char *res
 	//set the key
 	aes_set_key_data(key, plaintext);
 
-    aes_set_mode(AES_ENCRYPT_MODE);      //cipher mode
+	aes_set_mode(AES_ENCRYPT_MODE);      //cipher mode
 
     aes_wait_done();
 
@@ -124,6 +126,7 @@ int aes_encrypt(unsigned char *key, unsigned char* plaintext, unsigned char *res
  */
 int aes_decrypt(unsigned char *key, unsigned char* decrypttext, unsigned char *result)
 {
+
     //set the key
 	aes_set_key_data(key, decrypttext);
 
@@ -140,11 +143,13 @@ int aes_decrypt(unsigned char *key, unsigned char* decrypttext, unsigned char *r
   *********************************************************************************************************************/
 /**
  * @brief     This function refer to set the embase addr.
- * @param[in] addr - the base addr of CEVA data.
+ * @param[in] addr - the base addr of CEVA data.the [addr,addr+64k) need to cover the head address of the session of aes_data,
+ * 						Maybe you should to modify the link file to change the aes_data session address.
  * @return    none.
  */
 void aes_set_em_base_addr(unsigned int addr){
 	aes_base_addr = addr;   //set the embase addr
+	embase_offset = convert_ram_addr_bus2cpu(addr);
 }
 
 /**

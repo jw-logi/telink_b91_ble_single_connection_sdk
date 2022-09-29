@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	uart_reg.h
+ * @file     uart_reg.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef UART_REG_H
 #define UART_REG_H
-#include "../sys.h"
+#include "soc.h"
 
-/*******************************      uart0 registers: 0x140080   *******************************/
-/*******************************      uart1 registers: 0x1400c0      ******************************/
-#define reg_uart_data_buf_adr(i)  (0x140080+(i)*0x40)  //uart(i)
+/*******************************      uart0 registers: 0x80140080   *******************************/
+/*******************************      uart1 registers: 0x801400c0      ******************************/
+#define reg_uart_data_buf_adr(i)  (0x80140080+(i)*0x40)  //uart(i)
 
 #define reg_uart_data_buf(i,j)    REG_ADDR8(reg_uart_data_buf_adr(i)+(j)) //uart(i)_buf(j)
 #define reg_uart_data_hword_buf(i,j)  REG_ADDR16(reg_uart_data_buf_adr(i)+(j)*2)

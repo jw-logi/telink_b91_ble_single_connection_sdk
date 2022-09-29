@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ll_conn.h
+ * @file     ll_conn.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef LL_CONN_H_
 #define LL_CONN_H_
 
@@ -32,15 +33,8 @@
 
 
 
-/**
- * @brief	LE connection role
- */
-#define 		LL_ROLE_MASTER              					0
-#define 		LL_ROLE_SLAVE               					1
-
-
-#define 	BLE_INVALID_CONNECTION_HANDLE    					0xffff
-#define 	IS_CONNECTION_HANDLE_VALID(handle)  				( handle != BLE_INVALID_CONNECTION_HANDLE )
+#define 		BLE_INVALID_CONNECTION_HANDLE    				0xffff
+#define 		IS_CONNECTION_HANDLE_VALID(handle)  			( handle != BLE_INVALID_CONNECTION_HANDLE )
 
 /**
  * @brief      for user to initialize ACL connection module.
@@ -83,6 +77,9 @@ ble_sts_t	blc_ll_initAclConnRxFifo(u8 *pRxbuf, int size, int number);
  * 					   other: failed
  */
 ble_sts_t	blc_ll_setAclConnMaxOctetsNumber(u8 maxRxOct, u8 maxTxOct);
+
+
+
 
 
 #endif /* LL_CONN_H_ */

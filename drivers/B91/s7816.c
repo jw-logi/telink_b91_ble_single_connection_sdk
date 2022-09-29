@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	s7816.c
+ * @file     s7816.c
  *
- * @brief	This is the source file for B91
+ * @brief    This is the source file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
+#include "lib/include/plic.h"
 #include "s7816.h"
 #include "dma.h"
-#include "plic.h"
 
 volatile unsigned int  s7816_rst_pin;
 volatile unsigned int  s7816_vcc_pin;
@@ -34,13 +35,12 @@ volatile int s7816_rst_time;//us
  * @param[in]  	div	- set the divider of clock of 7816 module.
  * @return     	none.
  * @note        the clk-source of s7816 is 24M-pad,the clk of clk-pin can be divided as follow.
- * 				div:        0x60-4Mhz     0x40-6Mhz   0x20-12Mhz
- * 				baudrate:   0x60-10752    0x40-16194  0x20-32388
+ * 				div:        0x06-4Mhz     0x04-6Mhz   0x02-12Mhz
+ * 				baudrate:   0x06-10752    0x04-16194  0x02-32388
  */
 void s7816_set_clk(unsigned char div)
 {
-	reg_7816_clk_div&=0x0f;
-	reg_7816_clk_div|=(unsigned char)div;
+	reg_7816_clk_div = ((reg_7816_clk_div & (~FLD_7816_CLK_DIV)) | (div << 4 ));
 }
 
 /**
@@ -60,10 +60,10 @@ void s7816_set_time(int rst_time_us)
 void s7816_set_rst_pin(gpio_pin_e pin_7816_rst)
 {
 	s7816_rst_pin=pin_7816_rst;
-	gpio_function_en(pin_7816_rst);
+	gpio_set_low_level(pin_7816_rst);
 	gpio_output_en(pin_7816_rst);
 	gpio_input_dis(pin_7816_rst);
-	gpio_set_low_level(pin_7816_rst);
+	gpio_function_en(pin_7816_rst);
 }
 
 /**
@@ -74,10 +74,11 @@ void s7816_set_rst_pin(gpio_pin_e pin_7816_rst)
 void s7816_set_vcc_pin(gpio_pin_e pin_7816_vcc)
 {
 	s7816_vcc_pin=pin_7816_vcc;
-	gpio_function_en(pin_7816_vcc);
+	gpio_set_low_level(pin_7816_vcc);
 	gpio_output_en(pin_7816_vcc);
 	gpio_input_dis(pin_7816_vcc);
-	gpio_set_low_level(pin_7816_vcc);
+	gpio_function_en(pin_7816_vcc);
+
 }
 
 /**
@@ -98,15 +99,15 @@ void s7816_init(uart_num_e uart_num,s7816_clock_e clock,int f,int d)
 	int baud=clock*1000000*d/f;
 	if(clock==S7816_4MHZ)
 	{
-		s7816_set_clk(0x60);
+		s7816_set_clk(0x06);
 	}
 	else if(clock==S7816_6MHZ)
 	{
-		s7816_set_clk(0x40);
+		s7816_set_clk(0x04);
 	}
 	else if(clock==S7816_12MHZ)
 	{
-		s7816_set_clk(0x20);
+		s7816_set_clk(0x02);
 	}
 	uart_reset(uart_num);
 	uart_cal_div_and_bwpc(baud, 24*1000*1000, &div, &bwpc);

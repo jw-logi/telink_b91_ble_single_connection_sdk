@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ll_scan.h
+ * @file     ll_scan.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,19 +20,11 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef LL_SCAN_H_
 #define LL_SCAN_H_
 
 
-
-
-
-/**
- * @brief      for user to initialize scanning module
- * @param	   none
- * @return     none
- */
-void 		blc_ll_initScanning_module(void);
 
 
 /**
@@ -46,15 +38,6 @@ void 		blc_ll_initScanning_module(void);
  */
 ble_sts_t 	blc_ll_setScanParameter (scan_type_t scan_type, u16 scan_interval, u16 scan_window, own_addr_type_t  ownAddrType, scan_fp_type_t scanFilter_policy);
 
-
-/**
- * @brief	   enable or disable legacy scanning.
- * @param[in]  scan_enable
- * @param[in]  filter_duplicate - controls whether the Link Layer should filter out
- * 								  duplicate advertising reports (Filtering_Enabled) to the Host,
- * @return     Status - 0x00: command succeeded; 0x01-0xFF: command failed
- */
-ble_sts_t 	blc_ll_setScanEnable (scan_en_t scan_enable, dupFilter_en_t filter_duplicate);
 
 
 /**
@@ -88,9 +71,13 @@ ble_sts_t    blc_ll_addScanningInConnSlaveRole(void);
  */
 ble_sts_t    blc_ll_removeScanningFromConnSLaveRole(void);
 
-
-
-
+//To fix bug.
+/**
+ * @brief      This function is used to request the Controller to start or stop scanning.Not support scanning only.This Api is unavailable.
+ * @param[in]  scan_enable - scanning Enable
+ * @return     Status - 0x00: command succeeded; 0x01-0xFF: command failed
+ */
+ble_sts_t blc_ll_setScanEnable (scan_en_t scan_enable, dupFilter_en_t filter_duplicate);
 
 
 #endif /* LL_SCAN_H_ */

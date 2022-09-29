@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	drivers.h
+ * @file     drivers.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,13 +20,11 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #pragma once
 
-#include "drivers/B91/driver_b91.h"
+#include "drivers/B91/driver.h"
 #include "drivers/B91/ext_driver/driver_ext.h"
-#include "types.h"
-
-#include "common/assert.h"
 
 
 #define write_log32(err_code)   write_sram32(0x00014, err_code)

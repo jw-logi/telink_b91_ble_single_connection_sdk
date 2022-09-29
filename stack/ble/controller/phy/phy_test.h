@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	phy_test.h
+ * @file     phy_test.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef PHY_TEST_H_
 #define PHY_TEST_H_
 
@@ -87,28 +88,47 @@ ble_sts_t blc_phy_setPhyTestEnable (u8 en);
 bool 	  blc_phy_isPhyTestEnable(void);
 
 
-/**
- * @brief      uart RX data process for PHY test 2 wire UART mode
- * @param      none
- * @return     always 0
- */
-int 	 blc_phyTest_2wire_rxUartCb (void);
+#if (MCU_CORE_TYPE == MCU_CORE_9518)
+	/**
+	 * @brief      uart RX data process for PHY test 2 wire UART mode
+	 * @param      none
+	 * @return     always 0
+	 */
+	int 	 blc_phyTest_2wire_rxUartCb (void);
 
 
-/**
- * @brief      uart TX data process for PHY test 2 wire UART mode
- * @param      none
- * @return     always 0
- */
-int 	 blc_phyTest_2wire_txUartCb (void);
+	/**
+	 * @brief      uart TX data process for PHY test 2 wire UART mode
+	 * @param      none
+	 * @return     always 0
+	 */
+	int 	 blc_phyTest_2wire_txUartCb (void);
 
 
-/**
- * @brief      uart RX data process for PHY test hci UART mode
- * @param      none
- * @return     always 0
- */
-int blc_phyTest_hci_rxUartCb (void);
+	/**
+	 * @brief      uart RX data process for PHY test hci UART mode
+	 * @param      none
+	 * @return     always 0
+	 */
+	int blc_phyTest_hci_rxUartCb (void);
+#elif (MCU_CORE_TYPE == MCU_CORE_825x || MCU_CORE_TYPE == MCU_CORE_827x)
+	/**
+	 * @brief      uart RX data process for PHY test 2 wire UART mode
+	 * @param      none
+	 * @return     always 0
+	 */
+	int 	 phy_test_2_wire_rx_from_uart (void);
+
+
+	/**
+	 * @brief      uart TX data process for PHY test 2 wire UART mode
+	 * @param      none
+	 * @return     always 0
+	 */
+	int 	 phy_test_2_wire_tx_to_uart (void);
+#endif
+
+
 
 
 #endif /* PHY_TEST_H_ */

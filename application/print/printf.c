@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	printf.c
+ * @file     printf.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "tl_common.h"
 #include "drivers.h"
 #include "tl_common.h"
@@ -85,7 +86,7 @@ _attribute_ram_code_sec_noinline_  void dr_putchar(unsigned char byte){
 	bit[8] = ((byte>>7) & 0x01)? tmp_bit1 : tmp_bit0;
 	bit[9] = tmp_bit1;
 
-	t1 = clock_time();//eagle stimer register
+	t1 = clock_time();//B91 stimer register
 	for(j = 0;j<10;j++)
 	{
 		t2=t1;

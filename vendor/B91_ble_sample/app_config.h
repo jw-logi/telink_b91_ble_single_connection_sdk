@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	app_config.h
+ * @file     app_config.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #pragma once
 
 
@@ -56,7 +57,7 @@
  */
 #define UART_PRINT_DEBUG_ENABLE  			0
 #define DEBUG_GPIO_ENABLE					0
-#define JTAG_DEBUG_DISABLE					0
+#define JTAG_DEBUG_ENABLE					0
 
 
 
@@ -220,13 +221,22 @@
 
 
 
-#if (JTAG_DEBUG_DISABLE)//2-wire jtag mode
+#if (JTAG_DEBUG_ENABLE)//2-wire jtag mode
 
-#define PE6_FUNC			AS_GPIO
-#define PE7_FUNC			AS_GPIO
+#define PE4_FUNC	AS_TDI  //JTAG 4-WIRE FUNCTION
+#define PE5_FUNC	AS_TDO  //JTAG 4-WIRE FUNCTION
+#define PE6_FUNC	AS_TMS  //JTAG 4-WIRE FUNCTION
+#define PE7_FUNC	AS_TCK  //JTAG 4-WIRE FUNCTION
 
-#define PE6_INPUT_ENABLE	0
-#define PE7_INPUT_ENABLE	0
+#define PE4_INPUT_ENABLE	1 //JTAG 4-WIRE FUNCTION
+#define PE5_INPUT_ENABLE	1 //JTAG 4-WIRE FUNCTION
+#define PE6_INPUT_ENABLE	1 //JTAG 4-WIRE FUNCTION
+#define PE7_INPUT_ENABLE	1 //JTAG 4-WIRE FUNCTION
+
+#define PULL_WAKEUP_SRC_PE4	GPIO_PIN_PULLUP_10K //JTAG 4-WIRE FUNCTION
+#define PULL_WAKEUP_SRC_PE5	GPIO_PIN_PULLUP_10K //JTAG 4-WIRE FUNCTION
+#define PULL_WAKEUP_SRC_PE6	GPIO_PIN_PULLUP_10K //JTAG 4-WIRE FUNCTION
+#define PULL_WAKEUP_SRC_PE7	GPIO_PIN_PULLDOWN_100K //JTAG 4-WIRE FUNCTION
 
 #endif
 

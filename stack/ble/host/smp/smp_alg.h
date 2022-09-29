@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	smp_alg.h
+ * @file     smp_alg.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -140,6 +140,22 @@ void 			blt_smp_alg_h7 (unsigned char *r, unsigned char salt[16], unsigned char 
  * @return	none.
  */
 void 			blt_smp_alg_h8 (unsigned char *r, unsigned char k[16], unsigned char s[16], unsigned char keyId[4]);
+
+/**
+ * @brief	algorithm used in generating resolvable private address.
+ * @param[out]  prand:random number
+ * @return	none.
+ */
+void			blt_crypto_alg_prand(u8 prand[3]);
+
+/**
+ * @brief	random adress hash function.
+ * @param[in]   irk: irk buffer
+ * @param[in]   r:key
+ * @param[out]  out: result
+ * @return	none.
+ */
+void			blt_crypto_alg_ah(const u8 irk[16], u8 r[3], u8 out[3]);
 
 
 #endif /* SMP_ALG_H_ */

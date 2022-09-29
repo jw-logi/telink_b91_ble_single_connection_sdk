@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	s7816.h
+ * @file     s7816.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef S7816_H_
 #define S7816_H_
 
@@ -65,8 +66,8 @@ typedef enum{
  * @param[in]  	div	- set the divider of clock of 7816 module.
  * @return     	none.
  * @note        the clk-source of s7816 is 24M-pad,the clk of clk-pin can be divided as follow.
- * 				div:        0x60-4Mhz     0x40-6Mhz   0x20-12Mhz
- * 				baudrate:   0x60-10752    0x40-16194  0x20-32388
+ * 				div:        0x06-4Mhz     0x04-6Mhz   0x02-12Mhz
+ * 				baudrate:   0x06-10752    0x04-16194  0x02-32388
  */
 extern void s7816_set_clk(unsigned char div);
 

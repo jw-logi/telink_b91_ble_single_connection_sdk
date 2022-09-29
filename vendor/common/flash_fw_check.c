@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	flash_fw_check.c
+ * @file     flash_fw_check.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
-#if 1
-#include "flash_fw_check.h"
-#include "../../drivers/B91/flash.h"
 
-extern _attribute_data_retention_   int		ota_program_offset;
-extern _attribute_data_retention_	int		ota_program_bootAddr;
+#if 1
+#include "drivers.h"
+#include "flash_fw_check.h"
+
+
 extern unsigned long crc32_half_cal(unsigned long crc, unsigned char* input, unsigned long* table, int len);
 
 static const unsigned long fw_crc32_half_tbl[16] = {

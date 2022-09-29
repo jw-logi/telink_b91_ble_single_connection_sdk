@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	config.h
+ * @file     config.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
@@ -44,8 +45,15 @@
 
 #if(CHIP_TYPE == CHIP_TYPE_9518)
 	#define MCU_CORE_TYPE	MCU_CORE_9518
+#elif(CHIP_TYPE == CHIP_TYPE_825x)
+	#define MCU_CORE_TYPE	MCU_CORE_825x
+#elif(CHIP_TYPE == CHIP_TYPE_827x)
+	#define MCU_CORE_TYPE	MCU_CORE_827x
+#else
+	#define MCU_CORE_TYPE	1000
 #endif
 
+#define FREERTOS_ENABLE		0
 
 
 #endif /* CONFIG_H_ */

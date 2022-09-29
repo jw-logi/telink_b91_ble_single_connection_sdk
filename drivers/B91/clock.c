@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	clock.c
+ * @file     clock.c
  *
- * @brief	This is the source file for B91
+ * @brief    This is the source file for BLE SDK
  *
- * @author	Driver Group
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
+#include "lib/include/sys.h"
 #include "clock.h"
 #include "mspi.h"
-#include "sys.h"
 #include "stimer.h"
 /**********************************************************************************************************************
  *                                			  local constants                                                       *
@@ -241,6 +242,7 @@ unsigned int clock_get_32k_tick(void)
 {
     unsigned int t0 = 0;
     unsigned int t1 = 0;
+
     //In the system timer auto mode, when writing a tick value to the system tick, if the writing operation overlaps
     //with the 32k rising edge, the writing operation will be unsuccessful. When reading the 32k tick value,
     //first wait for the rising edge to pass to avoid overlap with the subsequent write tick value operation.
@@ -268,7 +270,11 @@ unsigned int clock_get_32k_tick(void)
  * @param[in]	cclk_div - the cclk divide from pll.it is useless if src is not PAD_PLL_DIV. cclk max is 96M
  * @param[in]	hclk_div - the hclk divide from cclk.hclk max is 48M.
  * @param[in]	pclk_div - the pclk divide from hclk.pclk max is 24M.if hclk = 1/2 * cclk, the pclk can not be 1/4 of hclk.
- * @param[in]	mspi_clk_div - mspi_clk has two source. pll div and hclk.mspi max is 64M.
+ * @param[in]	mspi_clk_div - mspi_clk has two source - pll div and hclk. If it is built-in flash, the maximum speed of mspi is 64M.
+							   If it is an external flash, the maximum speed of mspi needs to be based on the board test.
+							   Because the maximum speed is related to the wiring of the board, and is also affected by temperature and GPIO voltage,
+							   the maximum speed needs to be tested at the highest and lowest voltage of the board,
+							   and the high and low temperature long-term stability test speed is no problem.
  * @return      none
  */
 void clock_init(sys_pll_clk_e pll,

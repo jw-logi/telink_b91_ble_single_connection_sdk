@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	app_config.h
+ * @file     app_config.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #pragma once
 
 
 #include "feature_config.h"
 
 
-
-#if(FEATURE_TEST_MODE == TEST_POWER_ADV)
+#if (FEATURE_TEST_MODE == TEST_ADVERTISING_ONLY || FEATURE_TEST_MODE == TEST_ADVERTISING_IN_CONN_SLAVE_ROLE || FEATURE_TEST_MODE == TEST_SCANNING_IN_ADV_AND_CONN_SLAVE_ROLE )
+	#include "feature_ll_state/app_config.h"
+#elif(FEATURE_TEST_MODE == TEST_POWER_ADV)
 	#include "feature_adv_power/app_config.h"
 #elif(FEATURE_TEST_MODE == TEST_POWER_CONN)
 	#include "feature_conn_power/app_config.h"
@@ -61,6 +63,8 @@
 	#include "feature_ota/app_config.h"
 #elif (FEATURE_TEST_MODE == TEST_L2CAP_PREPARE_WRITE_BUFF)
 	#include "feature_use_reg_buffer/app_config.h"
+#elif (FEATURE_TEST_MODE == TEST_MULTIPLE_LOCAL_DEVICE)
+	#include "feature_multi_local_dev/app_config.h"
 #elif (FEATURE_TEST_MODE == TEST_FEATURE_BACKUP)
 	#include "feature_backup/app_config.h"
 #endif

@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	app.c
+ * @file     app.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "tl_common.h"
 #include "drivers.h"
 #include "stack/ble/ble.h"
@@ -59,7 +60,7 @@ _attribute_ram_code_ void  ble_remote_set_sleep_wakeup (u8 e, u8 *p, int n)
  * @param[in]  n - data length of event
  * @return     none
  */
-_attribute_ram_code_ void	user_set_rf_power (u8 e, u8 *p, int n)
+_attribute_ram_code_ void	task_suspend_exit (u8 e, u8 *p, int n)
 {
 	rf_set_power_level_index (MY_RF_POWER_INDEX);
 }
@@ -118,7 +119,7 @@ _attribute_no_inline_ void user_init_normal(void)
 
 	blc_ll_initBasicMCU();                      //mandatory
 	blc_ll_initStandby_module(mac_public);		//mandatory
-	blc_ll_initAdvertising_module(); 	//adv module: 		 mandatory for BLE slave,
+	blc_ll_initLegacyAdvertising_module(); 		//legacy advertising module: mandatory for BLE slave
 
 
 	//////////// Controller Initialization  End /////////////////////////
@@ -223,8 +224,8 @@ _attribute_no_inline_ void user_init_normal(void)
 		 */
 		#if 1
 			//ADV data length: 16 byte
-			u8 tbl_advData[8] = {
-				 0x0C, 0x09, 't', 'e', 's', 't', 'a', 'd',
+			u8 tbl_advData[] = {
+				 0x0F, 0x09, 't', 'e', 's', 't', 'a', 'd', 'v', '8', '9', 'A', 'B', 'C', 'D', 'E',
 				};
 		#else  	//ADV data length: max 31 byte
 			u8 tbl_advData[] = {

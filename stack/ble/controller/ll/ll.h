@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ll.h
+ * @file     ll.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,14 +20,13 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef LL__H_
 #define LL__H_
 
 
 #include "tl_common.h"
 #include "stack/ble/ble_common.h"
-
-
 
 /**
  * @brief	BLE link layer state
@@ -45,10 +44,7 @@
 typedef void (*blt_event_callback_t)(u8 e, u8 *p, int n);
 
 
-/**
- * @brief	Telink defined LinkLayer Callback Declaration for phyTest
- */
-typedef int (*blc_main_loop_phyTest_callback_t)(void);
+
 
 
 /**
@@ -72,8 +68,17 @@ typedef int (*blc_main_loop_phyTest_callback_t)(void);
 #define			BLT_EV_FLAG_CONN_PARA_UPDATE					13
 #define			BLT_EV_FLAG_SUSPEND_ENTER						14
 #define			BLT_EV_FLAG_SUSPEND_EXIT						15
+#define			BLT_EV_FLAG_VERSION_IND_REV						16
 
 
+
+#if (MCU_CORE_TYPE == MCU_CORE_825x || MCU_CORE_TYPE == MCU_CORE_827x)
+	my_fifo_t			blt_rxfifo;
+	u8					blt_rxfifo_b[];
+
+	my_fifo_t			blt_txfifo;
+	u8					blt_txfifo_b[];
+#endif
 typedef struct {
 	u16		connEffectiveMaxRxOctets;
 	u16		connEffectiveMaxTxOctets;
@@ -92,34 +97,9 @@ typedef struct {
 
 extern _attribute_aligned_(4) ll_data_extension_t  bltData;
 
-/**
- * @brief	This function is used to obtain the effective maximum TX data length
- * @param	none
- * @return	bltData.connEffectiveMaxTxOctets
- */
-static inline u8 blc_ll_get_connEffectiveMaxTxOctets(void)
-{
-	#if (LL_FEATURE_ENABLE_LE_DATA_LENGTH_EXTENSION)
-		return bltData.connEffectiveMaxTxOctets;
-	#else
-		return 27;
-	#endif
-}
-
-
-/**
- * @brief	This function is used to obtain the effective maximum RX data length
- * @param	none
- * @return	bltData.connEffectiveMaxRxOctets
- */
-static inline u8 blc_ll_get_connEffectiveMaxRxOctets(void)
-{
-	#if (LL_FEATURE_ENABLE_LE_DATA_LENGTH_EXTENSION)
-		return bltData.connEffectiveMaxRxOctets;
-	#else
-		return 27;
-	#endif
-}
+#if (MCU_CORE_TYPE == MCU_CORE_825x || MCU_CORE_TYPE == MCU_CORE_827x)
+extern my_fifo_t		hci_tx_fifo;
+#endif
 
 
 /**
@@ -187,7 +167,7 @@ ble_sts_t 	blc_ll_readBDAddr(u8 *addr);
 /**
  * @brief      this function is used to get LE stack current state
  * @param[in]  none.
- * @return     blt_state:
+ * @return     BLE link layer state:
  * 					BLS_LINK_STATE_IDLE
  * 					BLS_LINK_STATE_ADV
  * 					BLS_LINK_STATE_SCAN
@@ -203,12 +183,17 @@ u8 			blc_ll_getCurrentState(void);
  */
 u8 			blc_ll_getLatestAvgRSSI(void);
 
+#if (MCU_CORE_TYPE == MCU_CORE_825x || MCU_CORE_TYPE == MCU_CORE_827x)
+u16   		blc_ll_setInitTxDataLength (u16 maxTxOct);   //core4.2 long data packet
+#endif
+
 /**
  * @brief      this function is used to pend Controller event
  * @param[in]  none.
  * @return     blc_tlkEvent_pending
  */
 bool		blc_ll_isControllerEventPending(void);
+
 
 /**
  * @brief      this function is used to get TX FIFO Number of current state
@@ -217,6 +202,11 @@ bool		blc_ll_isControllerEventPending(void);
  */
 u8  		blc_ll_getTxFifoNumber (void);
 
+ble_sts_t 	blt_ll_exchangeDataLength (u8 opcode, u16 maxTxOct);   ///core4.2 data extension
+
+#if (MCU_CORE_TYPE == MCU_CORE_825x || MCU_CORE_TYPE == MCU_CORE_827x)
+#define 	blc_ll_exchangeDataLength	blt_ll_exchangeDataLength  ///Compatible with previous versions
+#endif
 
 
 /**
@@ -226,6 +216,74 @@ u8  		blc_ll_getTxFifoNumber (void);
  * @return		none
  */
 void		bls_app_registerEventCallback (u8 e, blt_event_callback_t p);
+
+
+/**
+ * @brief      this function is used to get TX FIFO Number of current state
+ * @param[in]  none.
+ * @return     total_fifo_num
+ */
+bool 		blc_ll_isBrxBusy (void);
+
+
+/**
+ * @brief      this function is used to set customized access code
+ * @param[in]  none.
+ * @return     none.
+ */
+void  blc_ll_set_CustomedAdvScanAccessCode(u32 accss_code);
+
+
+/**
+ * @brief      this function is used to get local supported feature by HCI.
+ * @param[in]  features - support feature buffer.
+ * @return     status, 0x00:  succeed
+ * 					   other: failed
+ */
+ble_sts_t blc_hci_le_getLocalSupportedFeatures(u8 *features);
+
+
+/**
+ * @brief      this function is used to reset HCI state.
+ * @param	   none
+ * @return     status, 0x00:  succeed
+ * 					   other: failed
+ */
+ble_sts_t  		blc_hci_reset(void);
+
+
+/**
+ * @brief      this function is used to set maximum md number.
+ * @param[in]  num - max number
+ * @return     none
+ */
+void 		blc_ll_init_max_md_nums(u8 num);
+
+
+/**
+ * @brief      this function is used to get random MAC address.
+ * @param[in]  none
+ * @return     none
+ */
+u8* 	blc_ll_get_macAddrRandom(void);
+
+
+/**
+ * @brief      this function is used to get public MAC address.
+ * @param[in]  none
+ * @return     none
+ */
+u8* 	blc_ll_get_macAddrPublic(void);
+
+
+
+/**
+ * @brief      used to set telink defined event mask for BLE module only.
+ * @param[in]  evtMask : event mask
+ * @return     status, 0x00:  succeed
+ * 			           other: failed
+ */
+ble_sts_t 	bls_hci_mod_setEventMask_cmd(u32 evtMask);
 
 
 
@@ -238,8 +296,20 @@ void		bls_app_registerEventCallback (u8 e, blt_event_callback_t p);
  */
 ble_sts_t	blc_controller_check_appBufferInitialization(void);
 
+/**
+ * @brief      this function is used to open or close freeRTOS.
+ * @param[in]  en , 1 : open
+ * 			        0 : close
+ * @return     none
+ */
+void blc_ll_set_freertos_en(u8 en);
 
-
+/**
+ * @brief      this function is used to get freeRTOS state.
+ * @return     1 : open
+ * 			   0 : close
+ */
+bool blc_ll_get_freertos_state(void);
 
 
 #endif /* LL__H_ */

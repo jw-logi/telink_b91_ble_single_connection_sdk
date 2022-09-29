@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ecc_ll.h
+ * @file     ecc_ll.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -24,9 +24,13 @@
 #ifndef ECC_LL_H_
 #define ECC_LL_H_
 
+#include "algorithm/ecc/ecc_curve.h"
 
-const u8 blt_ecc_dbg_priv_key[32];
-const u8 blt_ecc_dbg_pub_key[64];
+extern const u8 blt_ecc_dbg_priv_key192[24];
+extern const u8 blt_ecc_dbg_pub_key192[48];
+
+extern const u8 blt_ecc_dbg_priv_key256[32];
+extern const u8 blt_ecc_dbg_pub_key256[64];
 
 
 /**
@@ -44,7 +48,7 @@ void 			blt_ecc_init(void);
 * @return		1:  success
 *              0: failure
 */
-int 			blt_ecc_gen_key_pair(unsigned char pub[64], unsigned char priv[32], bool use_dbg_key);
+int 			blt_ecc_gen_key_pair(unsigned char *pub, unsigned char *priv, ecc_curve_t curve, bool use_dbg_key);
 
 /**
 * @brief		This function is used to calculate DHKEY based on the peer public key and own private key
@@ -54,7 +58,7 @@ int 			blt_ecc_gen_key_pair(unsigned char pub[64], unsigned char priv[32], bool 
 * @return		1:  success
 *              0: failure
 */
-int 			blt_ecc_gen_dhkey(const unsigned char peer_pub[64], const unsigned char own_priv[32], unsigned char out_dhkey[32]);
+int 			blt_ecc_gen_dhkey(const unsigned char *peer_pub, const unsigned char *own_priv, unsigned char *out_dhkey, ecc_curve_t curve);
 
 
 

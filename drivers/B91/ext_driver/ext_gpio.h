@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	ext_gpio.h
+ * @file     ext_gpio.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE Group
- * @date	2020
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@
 #include "../analog.h"
 #include "../dma.h"
 #include "../gpio.h"
-#include "../pm.h"
+#include "../lib/include/pm.h"
 #include "../timer.h"
 #include "../flash.h"
 #include "../mdec.h"
-#include "../trng.h"
-#include "../sys.h"
-#include "../plic.h"
+#include "../lib/include/trng.h"
+#include "../lib/include/sys.h"
+#include "../lib/include/plic.h"
 #include "../stimer.h"
 #include "../clock.h"
 #include "../compatibility_pack/cmpt.h"

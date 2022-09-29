@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	gatt.h
+ * @file     gatt.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef GATT_H_
 #define GATT_H_
 
@@ -140,5 +141,44 @@ ble_sts_t 	blc_gatt_pushReadBlobRequest (u16 connHandle, u16 attHandle, u16 offs
  */
 ble_sts_t 	blc_gatt_pushReadByGroupTypeRequest (u16 connHandle, u16 start_attHandle, u16 end_attHandle, u8 *uuid, int uuid_len);
 
+
+/**
+ * @brief	   This function is used to transmit prepare data to peer side.
+ * @param[in]  connHandle -  connection handle
+ * @param[in]  attHandle -  attribute handle.
+ * @param[in]  valOffset   - data offset.
+ * @param[in]  data - transmit data.
+ * @param[in]  data_len - transmit data len.
+ * @return     Status - 0x00: command succeeded; 0x01-0xFF: command failed
+ */
+ble_sts_t blc_gatt_pushPrepareWriteRequest (u16 connHandle, u16 attHandle, u16 valOffset,u8 *data, int data_len);
+
+
+/**
+ * @brief	   This function is used to execute prepare write.
+ * @param[in]  connHandle -  connection handle
+ * @param[in]  value - 0x00:Cancel all prepared writes
+ * 					   0x01:Immediately write all pending prepared values
+ * @return     Status - 0x00: command succeeded; 0x01-0xFF: command failed
+ */
+ble_sts_t blc_gatt_pushExecuteWriteRequest(u16 connHandle,u8 value);
+
+
+/**
+ * @brief       Send ATT Err Response.
+ * @param[in]   connHandle         - connection handle.
+ * @param[in]   reqOpcode          - reqOpcode.
+ * @param[in]   attHdlInErr        - attHdlInErr.
+ * @param[in]   ErrorCode
+ * @return      ble_sts_t.
+ */
+ble_sts_t	blc_gatt_pushErrResponse(u16 connHandle, u8 reqOpcode, u16 attHdlInErr, u8 ErrorCode);
+
+/**
+ * @brief       Send ATT handle value confirm.
+ * @param[in]   connHandle         - connection handle.
+ * @return      ble_sts_t.
+ */
+ble_sts_t blc_gatt_pushAttHdlValueCfm(u16 connHandle);
 
 #endif /* GATT_H_ */

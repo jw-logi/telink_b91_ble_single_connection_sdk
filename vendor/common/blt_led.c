@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	blt_led.c
+ * @file     blt_led.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
-#if 1
+
 #include "tl_common.h"
 #include "drivers.h"
-#include "../common/blt_led.h"
+#include "blt_led.h"
 
 
 
-device_led_t device_led;
+_attribute_data_retention_ device_led_t device_led;
 
 /**
  * @brief		This function is used to control device led on or off
@@ -129,5 +129,3 @@ void led_proc(void)
 #endif
 }
 
-
-#endif

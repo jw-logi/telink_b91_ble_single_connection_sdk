@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	main.c
+ * @file     main.c
  *
- * @brief	This is the source file for BLE SDK
+ * @brief    This is the source file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #include "tl_common.h"
 #include "drivers.h"
 #include "stack/ble/ble.h"
@@ -81,15 +82,8 @@ void uart0_irq_handler(void)
     if(uart_get_irq_status(UART0,UART_RXDONE)) //A0-SOC can't use RX-DONE status,so this interrupt can noly used in A1-SOC.
     {
     	/************************get the length of receive data****************************/
-    	if(((reg_uart_status1(UART0)&FLD_UART_RBCNT)%4)==0)
-    	{
-			rev_data_len=4*(0xffffff-reg_dma_size(DMA2));
-    	}
-    	else
-    	{
-    		rev_data_len=4*(0xffffff-reg_dma_size(DMA2)-1)+(reg_uart_status1(UART0)&FLD_UART_RBCNT)%4;
-    	}
-    	/************************cll rx_irq****************************/
+		rev_data_len = uart_get_dma_rev_data_len(UART0,DMA2);
+    	/************************clr rx_irq****************************/
     	uart_clr_irq_status(UART0,UART_CLR_RX);
 		if(rev_data_len!=0)
 		{

@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	feature_config.h
+ * @file     feature_config.h
  *
- * @brief	This is the header file for BLE SDK
+ * @brief    This is the header file for BLE SDK
  *
- * @author	BLE GROUP
- * @date	2020.06
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,12 +20,17 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef FEATURE_CONFIG_H_
 #define FEATURE_CONFIG_H_
 
 
 
 /////////////////// TEST FEATURE SELECTION /////////////////////////////////
+//ble link layer test
+#define TEST_ADVERTISING_ONLY							1
+#define TEST_ADVERTISING_IN_CONN_SLAVE_ROLE				2
+#define TEST_SCANNING_IN_ADV_AND_CONN_SLAVE_ROLE        3
 
 //power test
 #define TEST_POWER_ADV									10
@@ -63,11 +68,12 @@
 
 #define	TEST_OTA										95
 
+#define	TEST_MULTIPLE_LOCAL_DEVICE						96
 
 #define TEST_FEATURE_BACKUP								200
 
 
-#define FEATURE_TEST_MODE								TEST_OTA//TEST_FEATURE_BACKUP
+#define FEATURE_TEST_MODE								TEST_FEATURE_BACKUP
 
 
 

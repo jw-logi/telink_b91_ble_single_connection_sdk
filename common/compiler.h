@@ -1,12 +1,12 @@
 /********************************************************************************************************
- * @file	compiler.h
+ * @file     compiler.h
  *
- * @brief	This is the header file for B91
+ * @brief    This is the header file for BLE SDK
  *
- * @author	D.M.H
- * @date	2019
+ * @author	 BLE GROUP
+ * @date         06,2022
  *
- * @par     Copyright (c) 2020, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
+ * @par     Copyright (c) 2022, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
  *
  *          Licensed under the Apache License, Version 2.0 (the "License");
  *          you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
+
 #ifndef COMPILER_H_
 #define COMPILER_H_
 
@@ -29,8 +30,6 @@
 #define _attribute_text_sec_   					__attribute__((section(".text")))
 
 #define _attribute_aes_data_sec_      			__attribute__((section(".aes_data")))
-
-#define _attribute_data_retention_sec_   		__attribute__((section(".retention_data")))
 
 #define _attribute_aligned_(s)					__attribute__((aligned(s)))
 
@@ -46,9 +45,7 @@
 #define _attribute_no_inline_   		__attribute__((noinline))
 #define _inline_ 						inline
 #define _attribute_data_dlm_   			_attribute_session_(".dlm_data")//dlm:Data Local Memory
-#ifndef	BLC_PM_EN
-#define	BLC_PM_EN							1
-#endif
+
 
 #ifndef	BLC_PM_DEEP_RETENTION_MODE_EN
 #define	BLC_PM_DEEP_RETENTION_MODE_EN		1
@@ -56,9 +53,13 @@
 
 
 #if (BLC_PM_DEEP_RETENTION_MODE_EN)
-	#define _attribute_data_retention_   	_attribute_session_(".retention_data")
+	#define _attribute_data_retention_sec_   		__attribute__((section(".retention_data")))
+	#define _attribute_data_retention_   			__attribute__((section(".retention_data")))
+	#define _attribute_ble_data_retention_   		__attribute__((section(".retention_data")))
 #else
+    #define _attribute_data_retention_sec_
     #define _attribute_data_retention_
+    #define _attribute_ble_data_retention_
 #endif
 
 #define _attribute_ram_code_      __attribute__((section(".ram_code"))) __attribute__((noinline))
